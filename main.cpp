@@ -3,6 +3,7 @@
 #include <sstream>
 #include <string>
 #include <map>
+#include <vector>
 using namespace std;
 
 class Record {
@@ -24,7 +25,7 @@ public:
 
 class ParserFromFile {
 public:
-    void getRecords() {
+    vector<Record> getRecords() {
         ifstream inputFile("C:/!uni/programing-paradigms/airplane/input.txt");
         if (!inputFile.is_open()) {
             cerr << "Error opening the file!" << endl;
@@ -32,11 +33,14 @@ public:
         string line;
         string word;
         string tokens[15];
+        vector<Record> flights;
         int counter = 0;
         while (getline(inputFile, line)) {
             Record record = getFlightInfo(line, word, tokens, counter);
+            flights.push_back(record);
         }
         inputFile.close();
+        return flights;
     }
 
     Record getFlightInfo(string line, string word, string tokens[15], int counter) {
@@ -115,7 +119,8 @@ class ParserFromUser{};
 
 int main() {
     ParserFromFile parser;
-    parser.getRecords();
+    vector<Record> flights = parser.getRecords();
+    flights[1].showInfo();
     return 0;
 
 }
