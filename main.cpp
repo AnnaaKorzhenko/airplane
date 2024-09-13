@@ -100,7 +100,6 @@ public:
 class Ticket {
 private:
     string passengerName;
-    int passengerID;
     string seat;
     string flightID;
     string date;
@@ -135,6 +134,7 @@ void book(vector<Flight>& flights) {
     string flightNo;
     int row;
     char place;
+    string name;
     cout << "Input date of the flight" << endl;
     cin >> date;
     cout << "Input flight number" << endl;
@@ -143,6 +143,8 @@ void book(vector<Flight>& flights) {
     cin >> row;
     cout << "Input the seat yo want to book" << endl;
     cin >> place;
+    cout << "Input your name" << endl;
+    cin >> name;
     for (const auto& flight :flights){
         if (flight.date == date && flight.flightID == flightNo){
             for (auto& seat : flight.seats) {
@@ -160,6 +162,39 @@ void book(vector<Flight>& flights) {
     }
     cout << "Flight not found:(" << endl;
 }
+
+void returnSeat (vector<Flight>& flights) {
+    string date;
+    string flightNo;
+    int row;
+    char place;
+    cout << "Input date of the flight" << endl;
+    cin >> date;
+    cout << "Input flight number" << endl;
+    cin >> flightNo;
+    cout << "Input the row of the seat you want to return" << endl;
+    cin >> row;
+    cout << "Input the seat you want to return" << endl;
+    cin >> place;
+
+    for (auto& flight : flights) {
+        if (flight.date == date && flight.flightID == flightNo) {
+            for (auto& seat : flight.seats) {
+                if (seat.row == row && seat.place == place) {
+                    if (!seat.isAvailable) {
+                        seat.isAvailable = true;
+                        cout << "Seat " << row << place << " has been returned." << endl;
+                    } else {
+                        cout << "Seat " << row << place << " is already available." << endl;
+                    }
+                    return;
+                }
+            }
+        }
+    }
+    cout << "Flight not found." << endl;
+}
+
 int main() {
     ParserFromFile parser;
     vector<Flight> flights = parser.getRecords();
@@ -197,6 +232,7 @@ int main() {
                 }
                 break;
             case 3:
+                returnSeat(flights);
                 cout << "Do you want to continue? Y or N" << endl;
                 cin >> choise;
                 if (choise == "N") {
@@ -205,10 +241,6 @@ int main() {
                 break;
             case 4:
 
-                break;
-            case 5:
-                break;
-            case 6:
                 break;
             default:
                 cout << "Have a nice day!" << endl;
