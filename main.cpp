@@ -24,6 +24,26 @@ public:
     }
 };
 
+class Ticket {
+public:
+    string passengerName;
+    int ID;
+    string seat;
+    string flightID;
+    string date;
+
+    Ticket(const string& passengerName, int passengerID, const string& seat, const string& flightID, const string& date)
+        : passengerName(passengerName), ID(passengerID), seat(seat), flightID(flightID), date(date) {}
+
+    void showInfo() const {
+        cout << "Passenger Name: " << passengerName << endl;
+        cout << "Passenger ID: " << ID << endl;
+        cout << "Seat: " << seat << endl;
+        cout << "Flight ID: " << flightID << endl;
+        cout << "Date: " << date << endl;
+    }
+};
+
 class Flight {
 public:
     string date;
@@ -31,6 +51,7 @@ public:
     int seatsPerRow;
     map<string, string> prices;
     vector<Seat> seats;
+    vector<Ticket> bookedTickets;
     int rowsNumber;
     void showInfo() const{
         cout << "Date:" << date << endl;
@@ -56,6 +77,10 @@ public:
                 seats.push_back(seat);
             }
         }
+    }
+
+    void addTicket(const Ticket& ticket) {
+        bookedTickets.push_back(ticket);
     }
 };
 
@@ -97,15 +122,6 @@ public:
         return record;
     }
 };
-class Ticket {
-private:
-    string passengerName;
-    string seat;
-    string flightID;
-    string date;
-
-};
-class ParserFromUser{};
 
 void check(const vector<Flight>& flights) {
     string date;
@@ -135,6 +151,7 @@ void book(vector<Flight>& flights) {
     int row;
     char place;
     string name;
+    int ID;
     cout << "Input date of the flight" << endl;
     cin >> date;
     cout << "Input flight number" << endl;
@@ -145,12 +162,17 @@ void book(vector<Flight>& flights) {
     cin >> place;
     cout << "Input your name" << endl;
     cin >> name;
-    for (const auto& flight :flights){
+    cout << "Input your ID" << endl;
+    cin >> ID;
+    for (auto& flight :flights){
         if (flight.date == date && flight.flightID == flightNo){
             for (auto& seat : flight.seats) {
                 if (seat.row == row && seat.place == place) {
                     if (seat.isAvailable) {
                         seat.isAvailable = false;
+                        string seatStr = to_string(row) + "-" + place;
+                        Ticket newTicket(name, ID, seatStr, flight.flightID, flight.date);
+                        flight.addTicket(newTicket);
                         cout << "Seat " << row << place << " has been booked." << endl;
                     } else {
                         cout << "Seat " << row << place << " is not available." << endl;
@@ -192,8 +214,28 @@ void returnSeat (vector<Flight>& flights) {
             }
         }
     }
-    cout << "Flight not found." << endl;
+    cout << "Flight not found:(" << endl;
 }
+
+void viewBookedTickets(const vector<Flight>& flights) {
+    string date;
+    string flightNo;
+    cout << "Input date of the flight" << endl;
+    cin >> date;
+    cout << "Input flight number" << endl;
+    cin >> flightNo;
+    for (const auto& flight : flights) {
+        if (flight.date == date && flight.flightID == flightNo) {
+            cout << "Booked tickets for flight " << flight.flightID << " on " << flight.date << ":" << endl;
+            for (const auto& ticket : flight.bookedTickets) {
+                ticket.showInfo();
+                cout << "------------------------" << endl;
+            }
+        }
+    }
+    cout << "Flight not found :(" << endl;
+}
+
 
 int main() {
     ParserFromFile parser;
@@ -240,7 +282,12 @@ int main() {
                 }
                 break;
             case 4:
-
+                viewBookedTickets(flights);
+                cout << "Do you want to continue? Y or N" << endl;
+                cin >> choise;
+                if (choise == "N") {
+                    toContinue = false;
+                }
                 break;
             default:
                 cout << "Have a nice day!" << endl;
