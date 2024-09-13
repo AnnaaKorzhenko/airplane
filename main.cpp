@@ -6,7 +6,7 @@
 #include <vector>
 using namespace std;
 
-class Record {
+class Flight {
 public:
     string date;
     string flightID;
@@ -23,9 +23,9 @@ public:
     }
 };
 
-class ParserFromFile {
+class ParserFromFile:Flight{
 public:
-    vector<Record> getRecords() {
+    vector<Flight> getRecords() {
         ifstream inputFile("C:/!uni/programing-paradigms/airplane/input.txt");
         if (!inputFile.is_open()) {
             cerr << "Error opening the file!" << endl;
@@ -33,23 +33,23 @@ public:
         string line;
         string word;
         string tokens[15];
-        vector<Record> flights;
+        vector<Flight> flights;
         int counter = 0;
         while (getline(inputFile, line)) {
-            Record record = getFlightInfo(line, word, tokens, counter);
+            Flight record = getFlightInfo(line, word, tokens, counter);
             flights.push_back(record);
         }
         inputFile.close();
         return flights;
     }
 
-    Record getFlightInfo(string line, string word, string tokens[15], int counter) {
+    Flight getFlightInfo(string line, string word, string tokens[15], int counter) {
         stringstream ss(line);
         while (ss >> word) {
             tokens[counter] = word;
             counter++;
         }
-        Record record;
+        Flight record;
         record.date = tokens[0];
         record.flightID = tokens[1];
         record.seatsPerRow = stoi(tokens[2]);
@@ -57,45 +57,9 @@ public:
             string key = tokens[i];
             record.prices[key] = tokens[i+1];
         }
-        record.showInfo();
+        // record.showInfo();
         return record;
     }
-    /*Record getFlightInfo() {
-        ifstream inputFile("C:/!uni/programing-paradigms/airplane/input.txt");
-        if (!inputFile.is_open()) {
-            cerr << "Error opening the file!" << endl;
-        }
-        string line;
-        string word;
-        string tokens[15];
-        int counter = 0;
-
-        while (getline(inputFile, line)) {
-            stringstream ss(line);
-            while (ss >> word) {
-                tokens[counter] = word;
-                counter++;
-            }
-            Record record;
-            record.date = tokens[0];
-            record.flightID = tokens[1];
-            record.seatsPerRow = stoi(tokens[2]);
-            for (int i = 3; i < counter; i=i+2) {
-                string key = tokens[i];
-                record.prices[key] = tokens[i+1];
-            }
-            record.showInfo();
-
-        }
-        inputFile.close();
-    }*/
-};
-
-class Flight: Record {
-private:
-    string flightID;
-    int seatsPerRow;
-    string date;
 };
 class Ticket {
 private:
@@ -116,11 +80,51 @@ private:
 };
 class ParserFromUser{};
 
+void check(vector<Flight> flights) {
+    string date;
+    string flightNo;
+    cout << "Input date of the flight" << endl;
+    cin >> date;
+    cout << "Input flight number" << endl;
+    cin >> flightNo;
+    for (int i = 0; i < flights.size(); i++){
+        if (flights[i].date == date) {
+            if (flights[i].flightID == flightNo) {
+                flights[i].showInfo();
+            }
+        }
+    }
+}
 
 int main() {
     ParserFromFile parser;
-    vector<Record> flights = parser.getRecords();
+    vector<Flight> flights = parser.getRecords();
     flights[1].showInfo();
+    string input;
+    cout << "Enter operation to execute: " << endl;
+    cout << "Enter 1 to check available places" << endl;
+    cout << "Enter 2 to book a ticket" << endl;
+    cout << "Enter 3 to return a ticket" << endl;
+    cout << "Enter 4 to view the booking info" << endl;
+    cout << "Enter 5 to view all of your booked tickets (per user)" << endl;
+    cout << "Enter 6 to view all the booked tickets for the flight" << endl;
+    cin >> input;
+    switch (stoi(input)) {
+        case 1:
+            check(flights);
+            break;
+        case 2:
+            cout << "book";
+            break;
+        case 3:
+            break;
+        case 4:
+            break;
+        case 5:
+            break;
+        case 6:
+            break;
+    }
     return 0;
 
 }
