@@ -244,18 +244,18 @@ int main() {
         flight.initializeSeats();
     }
     flights[1].showInfo();
-    string input;
-    cout << "Enter operation to execute: " << endl;
-    cout << "Enter 1 to check available places" << endl;
-    cout << "Enter 2 to book a ticket" << endl;
-    cout << "Enter 3 to return a ticket" << endl;
-    cout << "Enter 4 to view the booking info" << endl;
-    cout << "Enter 5 to view all of your booked tickets (per user)" << endl;
-    cout << "Enter 6 to view all the booked tickets for the flight" << endl;
-    cin >> input;
     bool toContinue = true;
     string choise;
     while (toContinue == true) {
+        string input;
+        cout << "Enter operation to execute: " << endl;
+        cout << "Enter 1 to check available places" << endl;
+        cout << "Enter 2 to book a ticket" << endl;
+        cout << "Enter 3 to return a ticket" << endl;
+        cout << "Enter 4 to view the booking info" << endl;
+        cout << "Enter 5 to view all of your booked tickets (per user)" << endl;
+        cout << "Enter 6 to view all the booked tickets for the flight" << endl;
+        cin >> input;
         switch (stoi(input)) {
             case 1:
                 check(flights);
