@@ -253,45 +253,28 @@ int main() {
         cout << "Enter 2 to book a ticket" << endl;
         cout << "Enter 3 to return a ticket" << endl;
         cout << "Enter 4 to view the booking info" << endl;
-        cout << "Enter 5 to view all of your booked tickets (per user)" << endl;
-        cout << "Enter 6 to view all the booked tickets for the flight" << endl;
         cin >> input;
         switch (stoi(input)) {
             case 1:
                 check(flights);
-                cout << "Do you want to continue? Y or N" << endl;
-                cin >> choise;
-                if (choise == "N") {
-                    toContinue = false;
-                }
                 break;
             case 2:
                 book(flights);
-                cout << "Do you want to continue? Y or N" << endl;
-                cin >> choise;
-                if (choise == "N") {
-                    toContinue = false;
-                }
                 break;
             case 3:
                 returnSeat(flights);
-                cout << "Do you want to continue? Y or N" << endl;
-                cin >> choise;
-                if (choise == "N") {
-                    toContinue = false;
-                }
                 break;
             case 4:
                 viewBookedTickets(flights);
-                cout << "Do you want to continue? Y or N" << endl;
-                cin >> choise;
-                if (choise == "N") {
-                    toContinue = false;
-                }
                 break;
             default:
                 cout << "Have a nice day!" << endl;
             break;
+        }
+        cout << "Do you want to continue? Y or N" << endl;
+        cin >> choise;
+        if (choise == "N") {
+            toContinue = false;
         }
     }
     return 0;
